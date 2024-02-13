@@ -1,9 +1,11 @@
 const express = require('express');
 const { todoschema , fetchschema } = require('./app');
 const app = express();
-const todos = require('./db');
+const cors = require('cors');
+const {todos} = require('./db');
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/todo', async (req,res) => {
 
@@ -27,7 +29,9 @@ app.post('/todo', async (req,res) => {
 
    await todos.create(payload)
 
-    res.send("to do added")
+    res.json({
+        msg:"todo added"
+    })
 })
 
 app.put('/todo',  (req,res) => {
@@ -47,6 +51,7 @@ app.put('/todo',  (req,res) => {
         completed:true
     }).then( ondone => {
         if(ondone){
+            alert("done");
             res.send("marked as completed");
         }else{
             res.status(500).send();
